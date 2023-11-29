@@ -7,11 +7,11 @@ export const UserSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    createdDate: { type: Date, default: Date.now() },
     updateDate: { type: Date, default: Date.now() },
   },
   {
     versionKey: false,
+    timestamps: true,
   },
 );
 
@@ -21,6 +21,5 @@ export interface User extends mongoose.Document {
   lastName: string;
   email: string;
   password: string;
-  createdDate: Date;
   updateDate: Date;
 }
