@@ -1,4 +1,3 @@
-import { Dayjs } from 'dayjs';
 import * as mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema(
@@ -7,7 +6,6 @@ export const UserSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    updateDate: { type: Date, default: Date.now() },
   },
   {
     versionKey: false,
@@ -21,5 +19,4 @@ export interface User extends mongoose.Document {
   lastName: string;
   email: string;
   password: string;
-  updateDate: Date;
 }
