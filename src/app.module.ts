@@ -3,15 +3,30 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './User/user.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './User/user.guard';
+import { ConfigModule } from '@nestjs/config';
+import { TypeModule } from './type/type.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MongooseModule.forRoot(
-      'mongodb+srv://new12253952:0991588559New@cluster0.3zyfd80.mongodb.net/Report-Master?retryWrites=true&w=majority',
+      `mongodb+srv://${process.env.USERNAME_MONGO}:${process.env.PASSWORD_MONGO}@cluster0.3zyfd80.mongodb.net/Report-Master?retryWrites=true&w=majority`,
     ),
     UserModule,
+    TypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+
+// Authentification before any request
+/*
+providers: [AppService
+  ,{
+  provide: APP_GUARD,
+  useClass: AuthGuard,
+},],
+*/

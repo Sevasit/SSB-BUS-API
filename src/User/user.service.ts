@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -22,39 +23,62 @@ export class UserService {
   async addUser(user: UserDto) {
     try {
       const userFind = await this.model.findOne({ email: user.email });
+
       if (userFind != null) {
-        return 'Email already exists';
+        return {
+          message: 'Email already exists',
+          type: true,
+        };
       }
+
       const hashedPassword = await bcrypt.hash(user.password, 10);
+
       const newUser = new this.model({
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         password: hashedPassword,
       });
+
       await newUser.save();
-      return 'Created user successfully';
+
+      return {
+        message: 'Created user successfully',
+        type: true,
+      };
     } catch (err) {
-      throw new BadRequestException('Invalid form');
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
     }
   }
 
   async editUser(user: EditUserDto) {
     try {
       const userFind = await this.model.findOne({ _id: user.id });
+
       if (userFind == null) {
-        return 'User not found';
+        return {
+          message: 'User not found',
+          type: true,
+        };
       }
+
       const isPasswordMatched = await bcrypt.compare(
         user.password,
         userFind.password,
       );
 
       if (!isPasswordMatched) {
-        return 'Invalid password';
+        return {
+          message: 'Invalid password',
+          type: true,
+        };
       }
 
       const hashedPassword = await bcrypt.hash(user.newPassword, 10);
+
       await this.model.updateOne(
         { _id: user.id },
         {
@@ -67,42 +91,65 @@ export class UserService {
           },
         },
       );
+
+      return {
+        message: 'Updated user successfully',
+        type: true,
+      };
     } catch (err) {
       console.log(err);
-      throw new BadRequestException('Invalid form');
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
     }
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.model.findOne({ email: loginDto.email });
-    if (!user) {
-      return 'Invalid email or password';
-    }
+    try {
+      const user = await this.model.findOne({ email: loginDto.email });
 
-    const isPasswordMatched = await bcrypt.compare(
-      loginDto.password,
-      user.password,
-    );
+      if (!user) {
+        return {
+          message: 'Invalid email or password',
+          type: false,
+        };
+      }
 
-    if (!isPasswordMatched) {
-      return 'Invalid password';
-    }
+      const isPasswordMatched = await bcrypt.compare(
+        loginDto.password,
+        user.password,
+      );
 
-    const token = this.jwtService.sign({
-      id: user._id.toString(),
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    });
+      if (!isPasswordMatched) {
+        return {
+          message: 'Invalid password',
+          type: false,
+        };
+      }
 
-    return {
-      token: token,
-      data: {
+      const token = this.jwtService.sign({
         id: user._id.toString(),
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-      },
-    };
+      });
+
+      return {
+        token: token,
+        data: {
+          id: user._id.toString(),
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
   }
 }
