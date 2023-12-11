@@ -7,14 +7,14 @@ import { EditTypeDto } from './dto/editType.dto';
 
 @Injectable()
 export class TypeService {
-  constructor(@InjectModel('Type') private readonly model: Model<Type>) {}
+  constructor(@InjectModel('Type') private readonly typeModel: Model<Type>) {}
 
   async createType(createTypeDto: CreateTypeDto) {
     try {
-      const findTypeByName = await this.model.findOne({
+      const findTypeByName = await this.typeModel.findOne({
         typeName: createTypeDto.typeName,
       });
-      const findTypeByCode = await this.model.findOne({
+      const findTypeByCode = await this.typeModel.findOne({
         typeCode: createTypeDto.typeCode,
       });
       if (findTypeByName != null || findTypeByCode != null) {
@@ -23,7 +23,7 @@ export class TypeService {
           type: true,
         };
       }
-      const newType = new this.model({
+      const newType = new this.typeModel({
         typeName: createTypeDto.typeName,
         typeCode: createTypeDto.typeCode,
       });
@@ -43,7 +43,7 @@ export class TypeService {
 
   async findAllType() {
     try {
-      return await this.model.find().select('_id typeName typeCode').exec();
+      return await this.typeModel.find().select('_id typeName typeCode').exec();
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({
@@ -55,10 +55,10 @@ export class TypeService {
 
   async updateType(editTypeDto: EditTypeDto) {
     try {
-      const findTypeByName = await this.model.findOne({
+      const findTypeByName = await this.typeModel.findOne({
         typeName: editTypeDto.typeName,
       });
-      const findTypeByCode = await this.model.findOne({
+      const findTypeByCode = await this.typeModel.findOne({
         typeCode: editTypeDto.typeCode,
       });
       if (findTypeByName != null || findTypeByCode != null) {
@@ -67,7 +67,7 @@ export class TypeService {
           type: true,
         };
       }
-      await this.model.updateOne(
+      await this.typeModel.updateOne(
         { _id: editTypeDto.id },
         {
           $set: {
@@ -91,14 +91,14 @@ export class TypeService {
 
   async removeType(id: string) {
     try {
-      const findType = await this.model.findOne({ _id: id });
+      const findType = await this.typeModel.findOne({ _id: id });
       if (findType == null) {
         return {
           message: 'Cannot find type',
           type: true,
         };
       }
-      await this.model.deleteOne({ _id: id }).exec();
+      await this.typeModel.deleteOne({ _id: id }).exec();
       return {
         message: 'Deleted type successfully',
         type: true,

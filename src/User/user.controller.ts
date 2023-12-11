@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -33,5 +35,11 @@ export class UserController {
   @HttpCode(200)
   async login(@Body() loginDto: LoginDto) {
     return await this.userService.login(loginDto);
+  }
+
+  @Delete('delete')
+  @HttpCode(201)
+  async delete(@Query('id') id: string) {
+    return await this.userService.delete(id);
   }
 }
