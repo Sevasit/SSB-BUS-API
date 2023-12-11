@@ -1,6 +1,6 @@
 import { IsDate, IsString } from 'class-validator';
 
-export class UpdateTaskDto {
+export class SendTask {
   @IsString()
   readonly id: string;
   @IsString()

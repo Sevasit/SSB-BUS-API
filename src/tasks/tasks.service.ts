@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/createTask.dto';
-import { UpdateTaskDto } from './dto/updateTask.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Task } from './task.model';
 import { SendPoint } from './dto/sendPoint.dto';
+import { SendTask } from './dto/sendTask.dto';
 
 @Injectable()
 export class TasksService {
@@ -52,12 +52,12 @@ export class TasksService {
     }
   }
 
-  async update(updateTaskDto: UpdateTaskDto) {
+  async sendTask(sendTask: SendTask) {
     try {
-      const task = await this.taskModel.findById(updateTaskDto.id);
-      task.status = updateTaskDto.status;
-      task.imageEnd = updateTaskDto.imageEnd;
-      task.processBy = updateTaskDto.processBy;
+      const task = await this.taskModel.findById(sendTask.id);
+      task.status = sendTask.status;
+      task.imageEnd = sendTask.imageEnd;
+      task.processBy = sendTask.processBy;
       task.processAt = new Date();
       await task.save();
       return {
