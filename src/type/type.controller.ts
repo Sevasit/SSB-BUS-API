@@ -22,26 +22,27 @@ export class TypeController {
   @Post('create')
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  create(@Body() createTypeDto: CreateTypeDto) {
-    return this.typeService.createType(createTypeDto);
+  async create(@Body() createTypeDto: CreateTypeDto) {
+    return await this.typeService.createType(createTypeDto);
   }
 
   @Get('findAllType')
   @HttpCode(200)
-  findAllType() {
-    return this.typeService.findAllType();
+  async findAllType() {
+    return await this.typeService.findAllType();
   }
 
   @Patch('edit')
+  @HttpCode(201)
   @UseGuards(AuthGuard)
-  update(@Body() createTypeDto: EditTypeDto) {
-    return this.typeService.updateType(createTypeDto);
+  async update(@Body() createTypeDto: EditTypeDto) {
+    return await this.typeService.updateType(createTypeDto);
   }
 
   @Delete('delete')
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  remove(@Query('id') id: string) {
-    return this.typeService.removeType(id);
+  async remove(@Query('id') id: string) {
+    return await this.typeService.removeType(id);
   }
 }

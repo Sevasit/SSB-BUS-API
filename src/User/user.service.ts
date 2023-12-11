@@ -25,7 +25,7 @@ export class UserService {
       const userFind = await this.model.findOne({ email: user.email });
       const userFindRole = await this.model.findOne({ role: user.role });
 
-      if(userFindRole != null) {
+      if (userFindRole != null) {
         return {
           message: 'Role already exists',
           type: true,
@@ -46,7 +46,7 @@ export class UserService {
         lastName: user.lastName,
         email: user.email,
         password: hashedPassword,
-        role: user.role
+        role: user.role,
       });
 
       await newUser.save();
@@ -68,7 +68,7 @@ export class UserService {
       const userFind = await this.model.findOne({ _id: user.id });
       const userFindRole = await this.model.findOne({ role: user.role });
 
-      if(userFindRole != null) {
+      if (userFindRole != null) {
         return {
           message: 'Role already exists',
           type: true,
@@ -104,7 +104,7 @@ export class UserService {
             lastName: user.lastName,
             email: user.email,
             password: hashedPassword,
-            role: user.role
+            role: user.role,
           },
         },
       );
@@ -150,7 +150,7 @@ export class UserService {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: user.role
+        role: user.role,
       });
 
       return {
@@ -160,8 +160,25 @@ export class UserService {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
-          role: user.role
+          role: user.role,
         },
+      };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      await this.model.deleteOne({ _id: id }).exec();
+
+      return {
+        message: 'Deleted user successfully',
+        type: true,
       };
     } catch (err) {
       console.log(err);
