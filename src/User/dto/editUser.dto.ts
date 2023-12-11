@@ -13,4 +13,6 @@ export class EditUserDto {
   readonly password: string;
   @IsString()
   readonly newPassword: string;
+  @IsString()
+  readonly role: string;
 }
