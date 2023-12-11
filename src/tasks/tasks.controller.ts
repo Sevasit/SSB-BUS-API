@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/createTask.dto';
-import { UpdateTaskDto } from './dto/updateTask.dto';
+import { SendTask } from './dto/sendTask.dto';
 import { SendPoint } from './dto/sendPoint.dto';
 
 @Controller('tasks')
@@ -36,10 +36,10 @@ export class TasksController {
     return await this.tasksService.findByType(type);
   }
 
-  @Patch('edit')
+  @Patch('sendTask')
   @HttpCode(201)
-  async update(@Body() updateTaskDto: UpdateTaskDto) {
-    return await this.tasksService.update(updateTaskDto);
+  async sendTask(@Body() sendTask: SendTask) {
+    return await this.tasksService.sendTask(sendTask);
   }
 
   @Patch('sendpoint')
