@@ -9,4 +9,6 @@ export class UserDto {
   readonly email: string;
   @IsString()
   readonly password: string;
+  @IsString()
+  readonly role: string;
 }
