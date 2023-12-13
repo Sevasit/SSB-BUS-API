@@ -12,6 +12,7 @@ export class TasksService {
   async create(createTaskDto: CreateTaskDto) {
     try {
       const newTask = new this.taskModel({
+        userId: createTaskDto.userId,
         name: createTaskDto.name,
         phone: createTaskDto.phone,
         title: createTaskDto.title,
