@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 
 export const TaskSchema = new mongoose.Schema(
   {
+    userId: { type: String, required: true },
     name: { type: String, required: true },
     phone: { type: String, required: true },
     title: { type: String, required: true },
@@ -21,6 +22,7 @@ export const TaskSchema = new mongoose.Schema(
 );
 
 export interface Task extends mongoose.Document {
+  userId: string;
   name: string;
   phone: string;
   title: string;

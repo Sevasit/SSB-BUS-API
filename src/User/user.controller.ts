@@ -37,6 +37,12 @@ export class UserController {
     return await this.userService.login(loginDto);
   }
 
+  @Get('findUserData')
+  @HttpCode(200)
+  async findUserData(@Query('email') email: string) {
+    return await this.userService.findUserData(email);
+  }
+
   @Delete('delete')
   @HttpCode(201)
   async delete(@Query('id') id: string) {

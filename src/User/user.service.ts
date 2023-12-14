@@ -20,6 +20,33 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
+  async findUserData(email: string) {
+    try {
+      const user = await this.model.findOne({ email: email });
+
+      if (!user) {
+        return {
+          message: 'Invalid email',
+          type: false,
+        };
+      }
+
+      return {
+        id: user._id.toString(),
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+      };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
   async addUser(user: UserDto) {
     try {
       const userFind = await this.model.findOne({ email: user.email });

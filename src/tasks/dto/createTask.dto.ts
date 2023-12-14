@@ -2,6 +2,8 @@ import { IsString } from 'class-validator';
 
 export class CreateTaskDto {
   @IsString()
+  readonly userId: string;
+  @IsString()
   readonly name: string;
   @IsString()
   readonly phone: string;
