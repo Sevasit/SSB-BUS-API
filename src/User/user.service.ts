@@ -47,6 +47,22 @@ export class UserService {
     }
   }
 
+  async findUsers() {
+    try {
+      const user = await this.model
+        .find()
+        .select('_id firstName lastName email role updatedAt');
+
+      return user;
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
   async addUser(user: UserDto) {
     try {
       const userFind = await this.model.findOne({ email: user.email });
@@ -72,6 +88,7 @@ export class UserService {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        phone: user.phone,
         password: hashedPassword,
         role: user.role,
       });
@@ -130,6 +147,7 @@ export class UserService {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            phone: user.phone,
             password: hashedPassword,
             role: user.role,
           },

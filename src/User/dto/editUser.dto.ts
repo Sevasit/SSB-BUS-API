@@ -7,8 +7,10 @@ export class EditUserDto {
   readonly firstName: string;
   @IsString()
   readonly lastName: string;
-  @IsEmail()
+  @IsString()
   readonly email: string;
+  @IsString()
+  readonly phone: string;
   @IsString()
   readonly password: string;
   @IsString()

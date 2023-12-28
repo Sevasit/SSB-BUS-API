@@ -43,6 +43,12 @@ export class UserController {
     return await this.userService.findUserData(email);
   }
 
+  @Get('findUsers')
+  @HttpCode(200)
+  async findUsers() {
+    return await this.userService.findUsers();
+  }
+
   @Delete('delete')
   @HttpCode(201)
   async delete(@Query('id') id: string) {
