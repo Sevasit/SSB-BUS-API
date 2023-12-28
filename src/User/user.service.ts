@@ -88,6 +88,7 @@ export class UserService {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        phone: user.phone,
         password: hashedPassword,
         role: user.role,
       });
@@ -146,6 +147,7 @@ export class UserService {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            phone: user.phone,
             password: hashedPassword,
             role: user.role,
           },
