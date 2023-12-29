@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -20,11 +21,12 @@ export class UserController {
 
   @Post('register')
   @HttpCode(201)
+  @UseGuards(AuthGuard)
   async addUser(@Body() user: UserDto) {
     return await this.userService.addUser(user);
   }
 
-  @Post('editUser')
+  @Patch('editUser')
   @HttpCode(201)
   @UseGuards(AuthGuard)
   async editUser(@Body() user: EditUserDto) {
@@ -43,14 +45,23 @@ export class UserController {
     return await this.userService.findUserData(email);
   }
 
+  @Get('findUserDataById')
+  @HttpCode(200)
+  @UseGuards(AuthGuard)
+  async findUserDataById(@Query('id') id: string) {
+    return await this.userService.findUserDataById(id);
+  }
+
   @Get('findUsers')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findUsers() {
     return await this.userService.findUsers();
   }
 
   @Delete('delete')
   @HttpCode(201)
+  @UseGuards(AuthGuard)
   async delete(@Query('id') id: string) {
     return await this.userService.delete(id);
   }

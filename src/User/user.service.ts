@@ -47,6 +47,27 @@ export class UserService {
     }
   }
 
+  async findUserDataById(id: string) {
+    try {
+      const user = await this.model.findById(id);
+
+      return {
+        id: user._id.toString(),
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        role: user.role,
+      };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
   async findUsers() {
     try {
       const user = await this.model
@@ -109,8 +130,11 @@ export class UserService {
 
   async editUser(user: EditUserDto) {
     try {
-      const userFind = await this.model.findOne({ _id: user.id });
-      const userFindRole = await this.model.findOne({ role: user.role });
+      const userFind = await this.model.findOne({ email: user.email });
+      const userFindRole = await this.model.findOne({
+        role: user.role,
+        _id: { $ne: user.id },
+      });
 
       if (userFindRole != null) {
         return {
@@ -127,7 +151,7 @@ export class UserService {
       }
 
       const isPasswordMatched = await bcrypt.compare(
-        user.password,
+        user.oldPassword,
         userFind.password,
       );
 
