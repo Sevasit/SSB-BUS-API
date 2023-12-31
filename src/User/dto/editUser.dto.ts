@@ -12,7 +12,7 @@ export class EditUserDto {
   @IsString()
   readonly phone: string;
   @IsString()
-  readonly password: string;
+  readonly oldPassword: string;
   @IsString()
   readonly newPassword: string;
   @IsString()
