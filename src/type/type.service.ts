@@ -17,9 +17,15 @@ export class TypeService {
       const findTypeByCode = await this.typeModel.findOne({
         typeCode: createTypeDto.typeCode,
       });
-      if (findTypeByName != null || findTypeByCode != null) {
+      if (findTypeByName != null) {
         return {
           message: 'Type already exists',
+          type: true,
+        };
+      }
+      if (findTypeByCode != null) {
+        return {
+          message: 'Type code already exists',
           type: true,
         };
       }
@@ -43,7 +49,10 @@ export class TypeService {
 
   async findAllType() {
     try {
-      return await this.typeModel.find().select('_id typeName typeCode').exec();
+      return await this.typeModel
+        .find()
+        .select('_id typeName typeCode createdAt')
+        .exec();
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({
