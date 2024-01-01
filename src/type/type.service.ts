@@ -66,13 +66,21 @@ export class TypeService {
     try {
       const findTypeByName = await this.typeModel.findOne({
         typeName: editTypeDto.typeName,
+        _id: { $ne: editTypeDto.id },
       });
       const findTypeByCode = await this.typeModel.findOne({
         typeCode: editTypeDto.typeCode,
+        _id: { $ne: editTypeDto.id },
       });
-      if (findTypeByName != null || findTypeByCode != null) {
+      if (findTypeByName != null) {
         return {
           message: 'Type already exists',
+          type: true,
+        };
+      }
+      if (findTypeByCode != null) {
+        return {
+          message: 'Type code already exists',
           type: true,
         };
       }
@@ -112,6 +120,21 @@ export class TypeService {
         message: 'Deleted type successfully',
         type: true,
       };
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
+  async findTypeById(id: string) {
+    try {
+      return await this.typeModel
+        .findById(id)
+        .select('_id typeName typeCode createdAt')
+        .exec();
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({
