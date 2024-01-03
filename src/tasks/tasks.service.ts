@@ -53,6 +53,21 @@ export class TasksService {
     }
   }
 
+  async sendTaskApprove(id: string) {
+    try {
+      const task = await this.taskModel.findById(id);
+      task.status = 'approve';
+      await task.save();
+      return {
+        message: 'Approve task successfully',
+        type: true,
+      };
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
   async sendTask(sendTask: SendTask) {
     try {
       const task = await this.taskModel.findById(sendTask.id);

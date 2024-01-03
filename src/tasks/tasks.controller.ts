@@ -36,6 +36,12 @@ export class TasksController {
     return await this.tasksService.findByType(type);
   }
 
+  @Patch('sendTaskApprove')
+  @HttpCode(201)
+  async sendTaskApprove(@Query('id') id: string) {
+    return await this.tasksService.sendTaskApprove(id);
+  }
+
   @Patch('sendTask')
   @HttpCode(201)
   async sendTask(@Body() sendTask: SendTask) {
