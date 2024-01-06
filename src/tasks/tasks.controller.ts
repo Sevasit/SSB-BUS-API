@@ -36,6 +36,12 @@ export class TasksController {
     return await this.tasksService.findByType(type);
   }
 
+  @Get('findAllByIdUser')
+  @HttpCode(200)
+  async findAllByIdUser(@Query('userId') userId: string) {
+    return await this.tasksService.findAllByIdUser(userId);
+  }
+
   @Patch('sendTaskApprove')
   @HttpCode(201)
   async sendTaskApprove(@Query('id') id: string) {

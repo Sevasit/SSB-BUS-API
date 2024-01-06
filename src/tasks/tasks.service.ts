@@ -15,7 +15,6 @@ export class TasksService {
         userId: createTaskDto.userId,
         name: createTaskDto.name,
         phone: createTaskDto.phone,
-        title: createTaskDto.title,
         remark: createTaskDto.remark,
         type: createTaskDto.type,
         imageStart: createTaskDto.imageStart,
@@ -46,6 +45,20 @@ export class TasksService {
         .find({
           type: type,
         })
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findAllByIdUser(userId: string) {
+    try {
+      return this.taskModel
+        .find({
+          userId: userId,
+        })
+        .select('_id phone remark type status imageStart createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);

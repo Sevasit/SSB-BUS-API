@@ -8,8 +8,6 @@ export class CreateTaskDto {
   @IsString()
   readonly phone: string;
   @IsString()
-  readonly title: string;
-  @IsString()
   readonly remark: string;
   @IsString()
   readonly type: string;
