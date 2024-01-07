@@ -7,6 +7,4 @@ export class SendTask {
   readonly processBy: string;
   @IsString()
   readonly imageEnd: string;
-  @IsString()
-  readonly status: string;
 }
