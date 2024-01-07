@@ -70,6 +70,23 @@ export class TasksService {
     }
   }
 
+  async findCompleteByIdUser(userId: string) {
+    try {
+      return this.taskModel
+        .find({
+          userId: userId,
+          status: 'complete',
+        })
+        .select(
+          '_id imageEnd type building location status createdAt processAt point',
+        )
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
   async sendTaskApprove(id: string) {
     try {
       const task = await this.taskModel.findById(id);
@@ -88,7 +105,7 @@ export class TasksService {
   async sendTask(sendTask: SendTask) {
     try {
       const task = await this.taskModel.findById(sendTask.id);
-      task.status = sendTask.status;
+      task.status = 'complete';
       task.imageEnd = sendTask.imageEnd;
       task.processBy = sendTask.processBy;
       task.processAt = new Date();
@@ -114,7 +131,7 @@ export class TasksService {
       task.point = sendPoint.point;
       await task.save();
       return {
-        message: 'Updated task successfully',
+        message: 'Send point to task successfully',
         type: true,
       };
     } catch (err) {
