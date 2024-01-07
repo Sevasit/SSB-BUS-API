@@ -8,6 +8,7 @@ import { AuthGuard } from './User/user.guard';
 import { ConfigModule } from '@nestjs/config';
 import { TypeModule } from './type/type.module';
 import { TasksModule } from './tasks/tasks.module';
+import { BuildingModule } from './building/building.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TasksModule } from './tasks/tasks.module';
     UserModule,
     TypeModule,
     TasksModule,
+    BuildingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

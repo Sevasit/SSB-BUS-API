@@ -12,5 +12,9 @@ export class CreateTaskDto {
   @IsString()
   readonly type: string;
   @IsString()
+  readonly building: string;
+  @IsString()
+  readonly location: string;
+  @IsString()
   readonly imageStart: string;
 }

@@ -7,6 +7,8 @@ export const TaskSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     remark: { type: String, required: true },
     type: { type: String, required: true },
+    building: { type: String, required: true },
+    location: { type: String, required: true },
     status: { type: String, default: 'pending' },
     imageStart: { type: String, required: true },
     imageEnd: { type: String, default: '' },
@@ -26,6 +28,8 @@ export interface Task extends mongoose.Document {
   phone: string;
   remark: string;
   type: string;
+  building: string;
+  location: string;
   status: string;
   imageStart: string;
   imageEnd: string;

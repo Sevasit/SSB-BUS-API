@@ -17,6 +17,8 @@ export class TasksService {
         phone: createTaskDto.phone,
         remark: createTaskDto.remark,
         type: createTaskDto.type,
+        building: createTaskDto.building,
+        location: createTaskDto.location,
         imageStart: createTaskDto.imageStart,
       });
       await newTask.save();
@@ -58,7 +60,9 @@ export class TasksService {
         .find({
           userId: userId,
         })
-        .select('_id phone remark type status imageStart createdAt')
+        .select(
+          '_id phone remark type building location status imageStart createdAt',
+        )
         .exec();
     } catch (err) {
       console.log('Error: ', err);
