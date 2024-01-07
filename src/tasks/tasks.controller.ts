@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   Query,
   HttpCode,
@@ -34,6 +33,12 @@ export class TasksController {
   @HttpCode(200)
   async findByType(@Query('type') type: string) {
     return await this.tasksService.findByType(type);
+  }
+
+  @Get('findAllByIdUser')
+  @HttpCode(200)
+  async findAllByIdUser(@Query('userId') userId: string) {
+    return await this.tasksService.findAllByIdUser(userId);
   }
 
   @Patch('sendTaskApprove')
