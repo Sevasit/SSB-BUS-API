@@ -6,7 +6,11 @@ import * as dotenv from 'dotenv';
 async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: ['https://ssb-report-app.vercel.app'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true,
+  });
   app.useGlobalFilters;
   app.useGlobalPipes(
     new ValidationPipe({
