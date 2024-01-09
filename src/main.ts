@@ -7,7 +7,7 @@ async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['https://ssb-report-app.vercel.app'],
+    origin: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
