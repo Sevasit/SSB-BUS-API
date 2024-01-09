@@ -4,22 +4,16 @@ import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 
 async function bootstrap() {
-  const cors = require('cors');
   dotenv.config();
   const app = await NestFactory.create(AppModule);
-  app.use(
-    cors({
-      origin: '*',
-      methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-      credentials: true,
-    }),
-  );
-  // app.enableCors({
-  //   origin: '*',
-  //   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-  //   credentials: true,
-  //   allowedHeaders: 'Access-Control-Allow-Credentials',
-  // });
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true,
+    allowedHeaders: 'Access-Control-Allow-Credentials',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  });
   app.useGlobalFilters;
   app.useGlobalPipes(
     new ValidationPipe({
