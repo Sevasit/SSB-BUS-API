@@ -10,7 +10,8 @@ async function bootstrap() {
     origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
-    allowedHeaders: 'Content-Type, Accept',
+    allowedHeaders:
+      'Origin, X-Requested-With, Content-Type, Accept, access-token, Authorization',
   });
   app.useGlobalFilters;
   app.useGlobalPipes(
