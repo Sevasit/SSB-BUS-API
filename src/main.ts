@@ -10,7 +10,8 @@ async function bootstrap() {
     origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
-    allowedHeaders: 'Access-Control-Allow-Credentials',
+    allowedHeaders:
+      'Access-Control-Allow-Credentials, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
     preflightContinue: false,
     optionsSuccessStatus: 204,
   });
