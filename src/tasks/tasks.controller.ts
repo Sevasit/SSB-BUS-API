@@ -29,6 +29,12 @@ export class TasksController {
     return await this.tasksService.findAllTasks();
   }
 
+  @Get('findById')
+  @HttpCode(200)
+  async findById(@Query('id') id: string) {
+    return await this.tasksService.findById(id);
+  }
+
   @Get('findByType')
   @HttpCode(200)
   async findByType(@Query('type') type: string) {
@@ -45,6 +51,18 @@ export class TasksController {
   @HttpCode(200)
   async findCompleteByIdUser(@Query('userId') userId: string) {
     return await this.tasksService.findCompleteByIdUser(userId);
+  }
+
+  @Get('findPendingByType')
+  @HttpCode(200)
+  async findPendingByType(@Query('type') type: string) {
+    return await this.tasksService.findPendingByType(type);
+  }
+
+  @Get('findCompleteByType')
+  @HttpCode(200)
+  async findCompleteByType(@Query('type') type: string) {
+    return await this.tasksService.findCompleteByType(type);
   }
 
   @Patch('sendTaskApprove')
