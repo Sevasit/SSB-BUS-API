@@ -54,6 +54,22 @@ export class TasksService {
     }
   }
 
+  async findById(id: string) {
+    try {
+      return this.taskModel
+        .findOne({
+          _id: id,
+        })
+        .select(
+          '_id name phone remark type building location status imageStart createdAt',
+        )
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
   async findAllByIdUser(userId: string) {
     try {
       return this.taskModel
@@ -80,6 +96,36 @@ export class TasksService {
         .select(
           '_id imageEnd type building location status createdAt processAt point',
         )
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findPendingByType(type: string) {
+    try {
+      return this.taskModel
+        .find({
+          type: type,
+          status: 'pending',
+        })
+        .select('_id name type building createdAt')
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findCompleteByType(type: string) {
+    try {
+      return this.taskModel
+        .find({
+          type: type,
+          status: 'approve',
+        })
+        .select('_id name type building createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
