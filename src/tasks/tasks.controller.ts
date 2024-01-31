@@ -65,6 +65,25 @@ export class TasksController {
     return await this.tasksService.findCompleteByType(type);
   }
 
+  //For Dashboard
+  @Get('findCurrentTaskByType')
+  @HttpCode(200)
+  async findCurrentTaskByType(@Query('type') type: string) {
+    return await this.tasksService.findCurrentTaskByType(type);
+  }
+
+  @Get('findTaskCount')
+  @HttpCode(200)
+  async findTaskCount() {
+    return await this.tasksService.findTaskCount();
+  }
+
+  @Get('findTaskCountToGraph')
+  @HttpCode(200)
+  async findTaskCountToGraph() {
+    return await this.tasksService.findTaskCountToGraph();
+  }
+
   @Patch('sendTaskApprove')
   @HttpCode(201)
   async sendTaskApprove(@Query('id') id: string) {

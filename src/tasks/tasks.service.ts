@@ -5,10 +5,14 @@ import { Model } from 'mongoose';
 import { Task } from './task.model';
 import { SendPoint } from './dto/sendPoint.dto';
 import { SendTask } from './dto/sendTask.dto';
+import { TaskCount } from 'src/task-count/task-count.model';
 
 @Injectable()
 export class TasksService {
-  constructor(@InjectModel('Task') private readonly taskModel: Model<Task>) {}
+  constructor(
+    @InjectModel('Task') private readonly taskModel: Model<Task>,
+    @InjectModel('TaskCount') private readonly TaskCount: Model<TaskCount>,
+  ) {}
   async create(createTaskDto: CreateTaskDto) {
     try {
       const newTask = new this.taskModel({
@@ -21,6 +25,12 @@ export class TasksService {
         location: createTaskDto.location,
         imageStart: createTaskDto.imageStart,
       });
+      //Update TaskCount count += 1
+      await this.TaskCount.updateOne(
+        { type: createTaskDto.type },
+        { $inc: { count: 1 } },
+      ).exec();
+
       await newTask.save();
       return {
         message: 'Created task successfully',
@@ -127,6 +137,71 @@ export class TasksService {
         })
         .select('_id name type building createdAt')
         .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findCurrentTaskByType(type: string) {
+    try {
+      const currentDate = new Date();
+      const startOfDay = new Date(currentDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(currentDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      let query = {};
+
+      if (type === 'admin') {
+        query = {
+          createdAt: {
+            $gte: startOfDay.toISOString(),
+            $lte: endOfDay.toISOString(),
+          },
+        };
+      } else {
+        query = {
+          createdAt: {
+            $gte: startOfDay.toISOString(),
+            $lte: endOfDay.toISOString(),
+          },
+          type: type,
+        };
+      }
+
+      const result = await this.taskModel
+        .find(query)
+        .select('_id name phone createdAt')
+        .exec();
+      return result;
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findTaskCount() {
+    try {
+      return this.taskModel
+        .aggregate([
+          { $group: { _id: '$type', count: { $count: {} } } },
+          {
+            $sort: {
+              _id: 1, // 1 for ascending order, -1 for descending order
+            },
+          },
+        ])
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findTaskCountToGraph() {
+    try {
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });

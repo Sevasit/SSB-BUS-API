@@ -4,10 +4,14 @@ import { Model } from 'mongoose';
 import { Type } from './type.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { EditTypeDto } from './dto/editType.dto';
+import { TaskCount } from 'src/task-count/task-count.model';
 
 @Injectable()
 export class TypeService {
-  constructor(@InjectModel('Type') private readonly typeModel: Model<Type>) {}
+  constructor(
+    @InjectModel('Type') private readonly typeModel: Model<Type>,
+    @InjectModel('TaskCount') private readonly TaskCount: Model<TaskCount>,
+  ) {}
 
   async createType(createTypeDto: CreateTypeDto) {
     try {
@@ -33,6 +37,11 @@ export class TypeService {
         typeName: createTypeDto.typeName,
         typeCode: createTypeDto.typeCode,
       });
+      const newTaskCount = new this.TaskCount({
+        type: createTypeDto.typeName,
+        count: 0,
+      });
+      await newTaskCount.save();
       await newType.save();
       return {
         message: 'Created type successfully',
