@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeModule } from './type/type.module';
 import { TasksModule } from './tasks/tasks.module';
 import { BuildingModule } from './building/building.module';
+import { TaskCountModule } from './task-count/task-count.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BuildingModule } from './building/building.module';
     TypeModule,
     TasksModule,
     BuildingModule,
+    TaskCountModule,
   ],
   controllers: [AppController],
   providers: [AppService],
