@@ -120,7 +120,7 @@ export class TasksService {
           type: type,
           status: 'pending',
         })
-        .select('_id name type building createdAt')
+        .select('_id name phone type building createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
@@ -135,7 +135,7 @@ export class TasksService {
           type: type,
           status: 'approve',
         })
-        .select('_id name type building createdAt')
+        .select('_id name phone type building createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);

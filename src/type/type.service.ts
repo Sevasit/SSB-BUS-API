@@ -60,7 +60,7 @@ export class TypeService {
     try {
       return await this.typeModel
         .find()
-        .select('_id typeName typeCode createdAt')
+        .select('_id typeName typeCode createdAt updatedAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
