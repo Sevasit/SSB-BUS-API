@@ -72,7 +72,7 @@ export class UserService {
     try {
       const user = await this.model
         .find()
-        .select('_id firstName lastName email role updatedAt');
+        .select('_id firstName lastName email role createdAt updatedAt');
 
       return user;
     } catch (err) {

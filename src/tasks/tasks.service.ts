@@ -120,7 +120,7 @@ export class TasksService {
           type: type,
           status: 'pending',
         })
-        .select('_id name type building createdAt')
+        .select('_id name phone type building createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
@@ -135,7 +135,7 @@ export class TasksService {
           type: type,
           status: 'approve',
         })
-        .select('_id name type building createdAt')
+        .select('_id name phone type building createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
@@ -184,16 +184,20 @@ export class TasksService {
 
   async findTaskCount() {
     try {
-      return this.taskModel
-        .aggregate([
-          { $group: { _id: '$type', count: { $count: {} } } },
-          {
-            $sort: {
-              _id: 1, // 1 for ascending order, -1 for descending order
-            },
-          },
-        ])
+      const data = await this.TaskCount.find()
+        .select('type count')
+        .sort('type')
         .exec();
+      let listMap = new Map<any, any>();
+      let listLabel = new Array<string>();
+      let listCount = new Array<number>();
+      data.forEach((element) => {
+        listLabel.push(element.type);
+        listCount.push(element.count);
+      });
+      listMap['label'] = listLabel;
+      listMap['count'] = listCount;
+      return listMap;
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });
@@ -202,6 +206,10 @@ export class TasksService {
 
   async findTaskCountToGraph() {
     try {
+      return await this.TaskCount.find()
+        .select('type count')
+        .sort('type')
+        .exec();
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });
