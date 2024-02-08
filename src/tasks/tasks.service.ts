@@ -6,6 +6,7 @@ import { Task } from './task.model';
 import { SendPoint } from './dto/sendPoint.dto';
 import { SendTask } from './dto/sendTask.dto';
 import { TaskCount } from 'src/task-count/task-count.model';
+import { RejectTaskDto } from './dto/rejectTask.dto';
 
 @Injectable()
 export class TasksService {
@@ -113,6 +114,20 @@ export class TasksService {
     }
   }
 
+  async findPendingByAdmin() {
+    try {
+      return this.taskModel
+        .find({
+          status: 'pending',
+        })
+        .select('_id name phone type building createdAt')
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
   async findPendingByType(type: string) {
     try {
       return this.taskModel
@@ -210,6 +225,22 @@ export class TasksService {
         .select('type count')
         .sort('type')
         .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async sendTaskReject(rejectTaskDto: RejectTaskDto) {
+    try {
+      const task = await this.taskModel.findById(rejectTaskDto.id);
+      task.annotation = rejectTaskDto.annotation;
+      task.status = 'reject';
+      await task.save();
+      return {
+        message: 'Reject task successfully',
+        type: true,
+      };
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });
