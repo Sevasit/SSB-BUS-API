@@ -34,6 +34,7 @@ export class TypeController {
 
   @Get('findTypeById')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findTypeById(@Query('id') id: string) {
     return await this.typeService.findTypeById(id);
   }
