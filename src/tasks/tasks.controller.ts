@@ -7,12 +7,14 @@ import {
   Delete,
   Query,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { SendTask } from './dto/sendTask.dto';
 import { SendPoint } from './dto/sendPoint.dto';
 import { RejectTaskDto } from './dto/rejectTask.dto';
+import { AuthGuard } from 'src/User/user.guard';
 
 @Controller('tasks')
 export class TasksController {
@@ -56,18 +58,21 @@ export class TasksController {
 
   @Get('findPendingByAdmin')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findPendingByAdmin() {
     return await this.tasksService.findPendingByAdmin();
   }
 
   @Get('findPendingByType')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findPendingByType(@Query('type') type: string) {
     return await this.tasksService.findPendingByType(type);
   }
 
   @Get('findCompleteByType')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findCompleteByType(@Query('type') type: string) {
     return await this.tasksService.findCompleteByType(type);
   }
@@ -75,24 +80,29 @@ export class TasksController {
   //For Dashboard
   @Get('findCurrentTaskByType')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findCurrentTaskByType(@Query('type') type: string) {
     return await this.tasksService.findCurrentTaskByType(type);
   }
 
   @Get('findTaskCount')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findTaskCount() {
     return await this.tasksService.findTaskCount();
   }
 
   @Get('findTaskCountToGraph')
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   async findTaskCountToGraph() {
     return await this.tasksService.findTaskCountToGraph();
   }
+  //****
 
   @Patch('sendTaskReject')
   @HttpCode(201)
+  @UseGuards(AuthGuard)
   async sendTaskReject(@Body() rejectTaskDto: RejectTaskDto) {
     return await this.tasksService.sendTaskReject(rejectTaskDto);
   }
@@ -117,6 +127,7 @@ export class TasksController {
 
   @Delete('delete')
   @HttpCode(201)
+  @UseGuards(AuthGuard)
   async delete(@Query('id') id: string) {
     return await this.tasksService.delete(id);
   }
