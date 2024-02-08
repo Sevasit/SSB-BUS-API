@@ -12,6 +12,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { SendTask } from './dto/sendTask.dto';
 import { SendPoint } from './dto/sendPoint.dto';
+import { RejectTaskDto } from './dto/rejectTask.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -53,6 +54,12 @@ export class TasksController {
     return await this.tasksService.findCompleteByIdUser(userId);
   }
 
+  @Get('findPendingByAdmin')
+  @HttpCode(200)
+  async findPendingByAdmin() {
+    return await this.tasksService.findPendingByAdmin();
+  }
+
   @Get('findPendingByType')
   @HttpCode(200)
   async findPendingByType(@Query('type') type: string) {
@@ -82,6 +89,12 @@ export class TasksController {
   @HttpCode(200)
   async findTaskCountToGraph() {
     return await this.tasksService.findTaskCountToGraph();
+  }
+
+  @Patch('sendTaskReject')
+  @HttpCode(201)
+  async sendTaskReject(@Body() rejectTaskDto: RejectTaskDto) {
+    return await this.tasksService.sendTaskReject(rejectTaskDto);
   }
 
   @Patch('sendTaskApprove')

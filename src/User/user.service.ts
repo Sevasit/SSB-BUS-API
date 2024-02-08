@@ -49,7 +49,19 @@ export class UserService {
 
   async findUserDataById(id: string) {
     try {
-      const user = await this.model.findById(id);
+      const user = await this.model.findOne({ _id: id }).exec();
+      //   .then((user) => {
+      //     if (user) {
+      //       return user;
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     return null;
+      //   });
+
+      // if (user === null) {
+      //   return null;
+      // }
 
       return {
         id: user._id.toString(),

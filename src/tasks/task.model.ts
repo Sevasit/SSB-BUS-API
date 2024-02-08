@@ -11,6 +11,7 @@ export const TaskSchema = new mongoose.Schema(
     location: { type: String, required: true },
     status: { type: String, default: 'pending' },
     imageStart: { type: String, required: true },
+    annotation: { type: String, default: '' },
     imageEnd: { type: String, default: '' },
     processBy: { type: String, default: '' },
     processAt: { type: Date, default: '' },
@@ -32,6 +33,7 @@ export interface Task extends mongoose.Document {
   location: string;
   status: string;
   imageStart: string;
+  annotation: string;
   imageEnd: string;
   processBy: string;
   processAt: Date;
