@@ -59,7 +59,7 @@ export class TypeService {
   async findAllType() {
     try {
       return await this.typeModel
-        .find()
+        .find({ typeName: { $ne: 'admin' } })
         .select('_id typeName typeCode createdAt updatedAt')
         .exec();
     } catch (err) {

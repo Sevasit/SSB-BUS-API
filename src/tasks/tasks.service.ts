@@ -28,7 +28,7 @@ export class TasksService {
       });
       //Update TaskCount count += 1
       await this.TaskCount.updateOne(
-        { type: createTaskDto.type },
+        { _id: createTaskDto.type },
         { $inc: { count: 1 } },
       ).exec();
 
@@ -70,6 +70,14 @@ export class TasksService {
       return this.taskModel
         .findOne({
           _id: id,
+        })
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
         })
         .select(
           '_id name phone remark type building location status imageStart createdAt',
@@ -136,6 +144,14 @@ export class TasksService {
         .find({
           status: 'pending',
         })
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
+        })
         .select('_id name phone type building createdAt')
         .exec();
     } catch (err) {
@@ -151,6 +167,14 @@ export class TasksService {
           type: type,
           status: 'pending',
         })
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
+        })
         .select('_id name phone type building createdAt')
         .exec();
     } catch (err) {
@@ -165,6 +189,14 @@ export class TasksService {
         .find({
           type: type,
           status: 'approve',
+        })
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
         })
         .select('_id name phone type building createdAt')
         .exec();
@@ -185,7 +217,7 @@ export class TasksService {
 
       let query = {};
 
-      if (type === 'admin') {
+      if (type === '65c862c1744dfbb04f087387') {
         query = {
           createdAt: {
             $gte: startOfDay.toISOString(),

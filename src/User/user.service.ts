@@ -22,7 +22,13 @@ export class UserService {
 
   async findUserData(email: string) {
     try {
-      const user = await this.model.findOne({ email: email });
+      const user = await this.model
+        .findOne({ email: email })
+        .populate({
+          path: 'role',
+          select: 'typeName', // Select the specific fields from the 'type' collection
+        })
+        .select('_id firstName lastName email type');
 
       if (!user) {
         return {
@@ -31,13 +37,7 @@ export class UserService {
         };
       }
 
-      return {
-        id: user._id.toString(),
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-      };
+      return user;
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException({
@@ -49,28 +49,14 @@ export class UserService {
 
   async findUserDataById(id: string) {
     try {
-      const user = await this.model.findOne({ _id: id }).exec();
-      //   .then((user) => {
-      //     if (user) {
-      //       return user;
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     return null;
-      //   });
-
-      // if (user === null) {
-      //   return null;
-      // }
-
-      return {
-        id: user._id.toString(),
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        phone: user.phone,
-        role: user.role,
-      };
+      return await this.model
+        .findOne({ _id: id })
+        .populate({
+          path: 'role',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .select('_id email firstName lastName phone type')
+        .exec();
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException({
@@ -84,7 +70,11 @@ export class UserService {
     try {
       const user = await this.model
         .find()
-        .select('_id firstName lastName email role createdAt updatedAt');
+        .populate({
+          path: 'role',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .select('_id firstName lastName email type createdAt updatedAt');
 
       return user;
     } catch (err) {
