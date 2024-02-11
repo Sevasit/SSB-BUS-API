@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import { Building } from 'src/building/building.model';
+import { Type } from 'src/type/type.model';
 
 export const TaskSchema = new mongoose.Schema(
   {
@@ -6,8 +8,12 @@ export const TaskSchema = new mongoose.Schema(
     name: { type: String, required: true },
     phone: { type: String, required: true },
     remark: { type: String, required: true },
-    type: { type: String, required: true },
-    building: { type: String, required: true },
+    type: { type: mongoose.Schema.Types.ObjectId, ref: 'Type', required: true },
+    building: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Building',
+      required: true,
+    },
     location: { type: String, required: true },
     status: { type: String, default: 'pending' },
     imageStart: { type: String, required: true },
@@ -28,8 +34,8 @@ export interface Task extends mongoose.Document {
   name: string;
   phone: string;
   remark: string;
-  type: string;
-  building: string;
+  type: mongoose.Types.ObjectId | Type;
+  building: mongoose.Types.ObjectId | Building;
   location: string;
   status: string;
   imageStart: string;

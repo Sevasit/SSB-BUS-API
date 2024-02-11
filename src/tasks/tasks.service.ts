@@ -83,9 +83,17 @@ export class TasksService {
 
   async findAllByIdUser(userId: string) {
     try {
-      return this.taskModel
+      return await this.taskModel
         .find({
           userId: userId,
+        })
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
         })
         .select(
           '_id phone remark type building location status imageStart createdAt',
@@ -99,10 +107,18 @@ export class TasksService {
 
   async findCompleteByIdUser(userId: string) {
     try {
-      return this.taskModel
+      return await this.taskModel
         .find({
           userId: userId,
           status: 'complete',
+        })
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
         })
         .select(
           '_id imageEnd type building location status createdAt processAt point',
