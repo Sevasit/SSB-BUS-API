@@ -7,12 +7,14 @@ import { SendPoint } from './dto/sendPoint.dto';
 import { SendTask } from './dto/sendTask.dto';
 import { TaskCount } from 'src/task-count/task-count.model';
 import { RejectTaskDto } from './dto/rejectTask.dto';
+import { Type } from 'src/type/type.model';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectModel('Task') private readonly taskModel: Model<Task>,
     @InjectModel('TaskCount') private readonly TaskCount: Model<TaskCount>,
+    @InjectModel('Type') private readonly typeModel: Model<Type>,
   ) {}
   async create(createTaskDto: CreateTaskDto) {
     try {
@@ -28,7 +30,7 @@ export class TasksService {
       });
       //Update TaskCount count += 1
       await this.TaskCount.updateOne(
-        { _id: createTaskDto.type },
+        { typeId: createTaskDto.type },
         { $inc: { count: 1 } },
       ).exec();
 
