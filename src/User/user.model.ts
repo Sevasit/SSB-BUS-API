@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { Type } from 'src/type/type.model';
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -7,7 +8,7 @@ export const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
-    role: { type: String, required: true },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Type', required: true },
   },
   {
     versionKey: false,
@@ -22,5 +23,5 @@ export interface User extends mongoose.Document {
   email: string;
   phone: string;
   password: string;
-  role: string;
+  role: mongoose.Types.ObjectId | Type;
 }
