@@ -239,7 +239,13 @@ export class TasksService {
       const result = await this.taskModel
         .find(query)
         .select('_id name phone createdAt')
-        .exec();
+        .exec()
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return [];
+        });
       return result;
     } catch (err) {
       console.log('Error: ', err);
