@@ -39,6 +39,7 @@ export class TypeService {
       });
       const newTaskCount = new this.TaskCount({
         type: createTypeDto.typeName,
+        typeId: newType._id,
         count: 0,
       });
       await newTaskCount.save();
