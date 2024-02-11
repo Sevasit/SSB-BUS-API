@@ -178,7 +178,13 @@ export class TasksService {
           select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
         })
         .select('_id name phone type building createdAt')
-        .exec();
+        .exec()
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return [];
+        });
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });
@@ -201,7 +207,13 @@ export class TasksService {
           select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
         })
         .select('_id name phone type building createdAt')
-        .exec();
+        .exec()
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return [];
+        });
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });
