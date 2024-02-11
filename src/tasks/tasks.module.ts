@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TaskSchema } from './task.model';
 import { TaskCountSchema } from 'src/task-count/task-count.model';
+import { TypeSchema } from 'src/type/type.model';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TaskCountSchema } from 'src/task-count/task-count.model';
     MongooseModule.forFeature([
       { name: 'Task', schema: TaskSchema },
       { name: 'TaskCount', schema: TaskCountSchema },
+      { name: 'Type', schema: TypeSchema },
     ]),
   ],
   controllers: [TasksController],
