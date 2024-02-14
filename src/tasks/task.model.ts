@@ -19,7 +19,11 @@ export const TaskSchema = new mongoose.Schema(
     imageStart: { type: String, required: true },
     annotation: { type: String, default: '' },
     imageEnd: { type: String, default: '' },
-    processBy: { type: String, default: '' },
+    processBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: '',
+    },
     processAt: { type: Date, default: '' },
     point: { type: Number, required: true, default: 0 },
   },

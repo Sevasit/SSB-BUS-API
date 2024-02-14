@@ -8,6 +8,7 @@ import { SendTask } from './dto/sendTask.dto';
 import { TaskCount } from 'src/task-count/task-count.model';
 import { RejectTaskDto } from './dto/rejectTask.dto';
 import { Type } from 'src/type/type.model';
+import { ApproveTaskDto } from './dto/approve.dto';
 
 @Injectable()
 export class TasksService {
@@ -48,6 +49,28 @@ export class TasksService {
   async findAllTasks() {
     try {
       return this.taskModel.find().exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({ message: 'Error', type: false });
+    }
+  }
+
+  async findAllTaskHistory() {
+    try {
+      return this.taskModel
+        .find()
+        .populate({
+          path: 'type',
+          select: 'typeName -_id', // Select the specific fields from the 'type' collection
+        })
+        .populate({
+          path: 'building',
+          select: 'nameBuilding -_id', // Select the specific fields from the 'building' collection
+        })
+        .select(
+          '_id name userId phone type building status createdAt updatedAt',
+        )
+        .exec();
     } catch (err) {
       console.log('Error: ', err);
       throw new InternalServerErrorException({ message: 'Error', type: false });
@@ -304,6 +327,8 @@ export class TasksService {
       const task = await this.taskModel.findById(rejectTaskDto.id);
       task.annotation = rejectTaskDto.annotation;
       task.status = 'reject';
+      task.processBy = rejectTaskDto.processBy;
+      task.processAt = new Date();
       await task.save();
       return {
         message: 'Reject task successfully',
@@ -315,10 +340,12 @@ export class TasksService {
     }
   }
 
-  async sendTaskApprove(id: string) {
+  async sendTaskApprove(approveTaskDto: ApproveTaskDto) {
     try {
-      const task = await this.taskModel.findById(id);
+      const task = await this.taskModel.findById(approveTaskDto.id);
       task.status = 'approve';
+      task.processBy = approveTaskDto.processBy;
+      task.processAt = new Date();
       await task.save();
       return {
         message: 'Approve task successfully',

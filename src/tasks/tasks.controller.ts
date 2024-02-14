@@ -15,6 +15,7 @@ import { SendTask } from './dto/sendTask.dto';
 import { SendPoint } from './dto/sendPoint.dto';
 import { RejectTaskDto } from './dto/rejectTask.dto';
 import { AuthGuard } from 'src/User/user.guard';
+import { ApproveTaskDto } from './dto/approve.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -30,6 +31,12 @@ export class TasksController {
   @HttpCode(200)
   async findAll() {
     return await this.tasksService.findAllTasks();
+  }
+
+  @Get('findAllTaskHistory')
+  @HttpCode(200)
+  async findAllTaskHistory() {
+    return await this.tasksService.findAllTaskHistory();
   }
 
   @Get('findById')
@@ -109,8 +116,8 @@ export class TasksController {
 
   @Patch('sendTaskApprove')
   @HttpCode(201)
-  async sendTaskApprove(@Query('id') id: string) {
-    return await this.tasksService.sendTaskApprove(id);
+  async sendTaskApprove(@Body() approveTaskDto: ApproveTaskDto) {
+    return await this.tasksService.sendTaskApprove(approveTaskDto);
   }
 
   @Patch('sendTask')
