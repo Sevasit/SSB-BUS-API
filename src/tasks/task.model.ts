@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { User } from 'src/User/user.model';
 import { Building } from 'src/building/building.model';
 import { Type } from 'src/type/type.model';
 
@@ -22,7 +23,7 @@ export const TaskSchema = new mongoose.Schema(
     processBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      default: '',
+      default: null,
     },
     processAt: { type: Date, default: '' },
     point: { type: Number, required: true, default: 0 },
@@ -45,7 +46,7 @@ export interface Task extends mongoose.Document {
   imageStart: string;
   annotation: string;
   imageEnd: string;
-  processBy: any;
+  processBy: mongoose.Types.ObjectId | User | string;
   processAt: Date;
   point: number;
 }
