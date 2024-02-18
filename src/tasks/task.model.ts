@@ -45,7 +45,7 @@ export interface Task extends mongoose.Document {
   imageStart: string;
   annotation: string;
   imageEnd: string;
-  processBy: string;
+  processBy: any;
   processAt: Date;
   point: number;
 }
