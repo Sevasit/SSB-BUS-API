@@ -9,6 +9,7 @@ import { TaskCount } from 'src/task-count/task-count.model';
 import { RejectTaskDto } from './dto/rejectTask.dto';
 import { Type } from 'src/type/type.model';
 import { ApproveTaskDto } from './dto/approve.dto';
+import axios from 'axios';
 
 @Injectable()
 export class TasksService {
@@ -36,6 +37,40 @@ export class TasksService {
       ).exec();
 
       await newTask.save();
+
+      const type = await this.typeModel
+        .findOne({ _id: createTaskDto.type })
+        .exec();
+
+      const message =
+        'Suggestion for Bus' +
+        '\nมีการแจ้งปัญหา : ' +
+        type.typeName +
+        '\nรายละเอียด : ' +
+        createTaskDto.remark +
+        '\nผู้แจ้ง : ' +
+        createTaskDto.name +
+        '\nวันที่แจ้ง : ' +
+        new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) +
+        '\nสถานที่ : ' +
+        createTaskDto.location +
+        '\nอาคาร : ' +
+        createTaskDto.building +
+        '\nเบอร์โทร : ' +
+        createTaskDto.phone;
+
+      await axios.post(
+        'https://notify-api.line.me/api/notify',
+        {
+          message: message,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: 'Bearer ' + process.env.TOKEN_LINE_NOTIFY,
+          },
+        },
+      );
       return {
         message: 'Created task successfully',
         type: true,
