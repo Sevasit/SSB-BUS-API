@@ -5,12 +5,16 @@ import { Type } from './type.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { EditTypeDto } from './dto/editType.dto';
 import { TaskCount } from 'src/task-count/task-count.model';
+import { Task } from 'src/tasks/task.model';
+import { User } from 'src/User/user.model';
 
 @Injectable()
 export class TypeService {
   constructor(
     @InjectModel('Type') private readonly typeModel: Model<Type>,
     @InjectModel('TaskCount') private readonly TaskCount: Model<TaskCount>,
+    @InjectModel('Task') private readonly Task: Model<Task>,
+    @InjectModel('User') private readonly User: Model<User>,
   ) {}
 
   async createType(createTypeDto: CreateTypeDto) {
@@ -126,6 +130,9 @@ export class TypeService {
         };
       }
       await this.typeModel.deleteOne({ _id: id }).exec();
+      await this.Task.deleteMany({ type: id }).exec();
+      await this.User.deleteMany({ role: id }).exec();
+      await this.TaskCount.deleteMany({ typeId: id }).exec();
       return {
         message: 'Deleted type successfully',
         type: true,
