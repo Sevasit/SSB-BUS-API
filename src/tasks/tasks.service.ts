@@ -10,6 +10,7 @@ import { RejectTaskDto } from './dto/rejectTask.dto';
 import { Type } from 'src/type/type.model';
 import { ApproveTaskDto } from './dto/approve.dto';
 import axios from 'axios';
+import { Building } from 'src/building/building.model';
 
 @Injectable()
 export class TasksService {
@@ -17,6 +18,7 @@ export class TasksService {
     @InjectModel('Task') private readonly taskModel: Model<Task>,
     @InjectModel('TaskCount') private readonly TaskCount: Model<TaskCount>,
     @InjectModel('Type') private readonly typeModel: Model<Type>,
+    @InjectModel('Building') private readonly buildingModel: Model<Building>,
   ) {}
   async create(createTaskDto: CreateTaskDto) {
     try {
@@ -42,6 +44,10 @@ export class TasksService {
         .findOne({ _id: createTaskDto.type })
         .exec();
 
+      const building = await this.buildingModel
+        .findOne({ _id: createTaskDto.building })
+        .exec();
+
       const message =
         'Suggestion for Bus' +
         '\nมีการแจ้งปัญหา : ' +
@@ -55,7 +61,7 @@ export class TasksService {
         '\nสถานที่ : ' +
         createTaskDto.location +
         '\nอาคาร : ' +
-        createTaskDto.building +
+        building.nameBuilding +
         '\nเบอร์โทร : ' +
         createTaskDto.phone;
 
