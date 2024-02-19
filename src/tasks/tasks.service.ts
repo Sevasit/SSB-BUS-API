@@ -65,18 +65,34 @@ export class TasksService {
         '\nเบอร์โทร : ' +
         createTaskDto.phone;
 
-      await axios.post(
-        'https://notify-api.line.me/api/notify',
-        {
-          message: message,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Bearer ' + process.env.TOKEN_LINE_NOTIFY,
+      if (createTaskDto.type === '65d2199851a1bc64625a5837') {
+        await axios.post(
+          'https://notify-api.line.me/api/notify',
+          {
+            message: message,
           },
-        },
-      );
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: 'Bearer ' + process.env.TOKEN_LINE_NOTIFY_COM,
+            },
+          },
+        );
+      } else {
+        await axios.post(
+          'https://notify-api.line.me/api/notify',
+          {
+            message: message,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: 'Bearer ' + process.env.TOKEN_LINE_NOTIFY,
+            },
+          },
+        );
+      }
+
       return {
         message: 'Created task successfully',
         type: true,
