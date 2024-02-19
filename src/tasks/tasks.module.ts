@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TaskSchema } from './task.model';
 import { TaskCountSchema } from 'src/task-count/task-count.model';
 import { TypeSchema } from 'src/type/type.model';
+import { BuildingSchema } from 'src/building/building.model';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TypeSchema } from 'src/type/type.model';
       { name: 'Task', schema: TaskSchema },
       { name: 'TaskCount', schema: TaskCountSchema },
       { name: 'Type', schema: TypeSchema },
+      { name: 'Building', schema: BuildingSchema },
     ]),
   ],
   controllers: [TasksController],
