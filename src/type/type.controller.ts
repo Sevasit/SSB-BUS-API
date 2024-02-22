@@ -32,6 +32,12 @@ export class TypeController {
     return await this.typeService.findAllType();
   }
 
+  @Get('findAllTypeByAdmin')
+  @HttpCode(200)
+  async findAllTypeByAdmin() {
+    return await this.typeService.findAllTypeByAdmin();
+  }
+
   @Get('findTypeById')
   @HttpCode(200)
   @UseGuards(AuthGuard)
@@ -46,10 +52,10 @@ export class TypeController {
     return await this.typeService.updateType(createTypeDto);
   }
 
-  @Delete('delete')
-  @HttpCode(201)
-  @UseGuards(AuthGuard)
-  async remove(@Query('id') id: string) {
-    return await this.typeService.removeType(id);
-  }
+  // @Delete('delete')
+  // @HttpCode(201)
+  // @UseGuards(AuthGuard)
+  // async remove(@Query('id') id: string) {
+  //   return await this.typeService.removeType(id);
+  // }
 }
