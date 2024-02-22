@@ -75,6 +75,21 @@ export class TypeService {
     }
   }
 
+  async findAllTypeIncludeAdmin() {
+    try {
+      return await this.typeModel
+        .find({ status: true })
+        .select('_id typeName typeCode status createdAt updatedAt')
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
   async findAllTypeByAdmin() {
     try {
       return await this.typeModel

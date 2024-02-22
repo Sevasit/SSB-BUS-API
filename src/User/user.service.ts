@@ -132,9 +132,13 @@ export class UserService {
 
   async editUser(user: EditUserDto) {
     try {
-      const userFind = await this.model.findOne({ email: user.email });
+      const userFindById = await this.model.findOne({ _id: user.id });
       const userFindRole = await this.model.findOne({
         role: user.role,
+        _id: { $ne: user.id },
+      });
+      const userFindByIdEmail = await this.model.findOne({
+        email: user.email,
         _id: { $ne: user.id },
       });
 
@@ -145,7 +149,14 @@ export class UserService {
         };
       }
 
-      if (userFind == null) {
+      if (userFindByIdEmail != null) {
+        return {
+          message: 'Email already exists',
+          type: true,
+        };
+      }
+
+      if (userFindById == null) {
         return {
           message: 'User not found',
           type: true,
@@ -154,7 +165,7 @@ export class UserService {
 
       const isPasswordMatched = await bcrypt.compare(
         user.oldPassword,
-        userFind.password,
+        userFindById.password,
       );
 
       if (!isPasswordMatched) {
