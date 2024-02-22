@@ -32,6 +32,12 @@ export class TypeController {
     return await this.typeService.findAllType();
   }
 
+  @Get('findAllTypeIncludeAdmin')
+  @HttpCode(200)
+  async findAllTypeIncludeAdmin() {
+    return await this.typeService.findAllTypeIncludeAdmin();
+  }
+
   @Get('findAllTypeByAdmin')
   @HttpCode(200)
   async findAllTypeByAdmin() {
