@@ -13,8 +13,6 @@ export class TypeService {
   constructor(
     @InjectModel('Type') private readonly typeModel: Model<Type>,
     @InjectModel('TaskCount') private readonly TaskCount: Model<TaskCount>,
-    @InjectModel('Task') private readonly Task: Model<Task>,
-    @InjectModel('User') private readonly User: Model<User>,
   ) {}
 
   async createType(createTypeDto: CreateTypeDto) {
@@ -40,6 +38,7 @@ export class TypeService {
       const newType = new this.typeModel({
         typeName: createTypeDto.typeName,
         typeCode: createTypeDto.typeCode,
+        status: createTypeDto.status,
       });
       const newTaskCount = new this.TaskCount({
         type: createTypeDto.typeName,
@@ -64,8 +63,23 @@ export class TypeService {
   async findAllType() {
     try {
       return await this.typeModel
+        .find({ typeName: { $ne: 'admin' }, status: true })
+        .select('_id typeName typeCode status createdAt updatedAt')
+        .exec();
+    } catch (err) {
+      console.log('Error: ', err);
+      throw new InternalServerErrorException({
+        message: 'Error',
+        type: false,
+      });
+    }
+  }
+
+  async findAllTypeByAdmin() {
+    try {
+      return await this.typeModel
         .find({ typeName: { $ne: 'admin' } })
-        .select('_id typeName typeCode createdAt updatedAt')
+        .select('_id typeName typeCode status createdAt updatedAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
@@ -104,6 +118,7 @@ export class TypeService {
           $set: {
             typeName: editTypeDto.typeName,
             typeCode: editTypeDto.typeCode,
+            status: editTypeDto.status,
           },
         },
       );
@@ -120,37 +135,35 @@ export class TypeService {
     }
   }
 
-  async removeType(id: string) {
-    try {
-      const findType = await this.typeModel.findOne({ _id: id });
-      if (findType == null) {
-        return {
-          message: 'Cannot find type',
-          type: true,
-        };
-      }
-      await this.typeModel.deleteOne({ _id: id }).exec();
-      await this.Task.deleteMany({ type: id }).exec();
-      await this.User.deleteMany({ role: id }).exec();
-      await this.TaskCount.deleteMany({ typeId: id }).exec();
-      return {
-        message: 'Deleted type successfully',
-        type: true,
-      };
-    } catch (err) {
-      console.log('Error: ', err);
-      throw new InternalServerErrorException({
-        message: 'Error',
-        type: false,
-      });
-    }
-  }
+  // async removeType(id: string) {
+  //   try {
+  //     const findType = await this.typeModel.findOne({ _id: id });
+  //     if (findType == null) {
+  //       return {
+  //         message: 'Cannot find type',
+  //         type: true,
+  //       };
+  //     }
+  //     await this.typeModel.deleteOne({ _id: id }).exec();
+  //     await this.TaskCount.deleteMany({ typeId: id }).exec();
+  //     return {
+  //       message: 'Deleted type successfully',
+  //       type: true,
+  //     };
+  //   } catch (err) {
+  //     console.log('Error: ', err);
+  //     throw new InternalServerErrorException({
+  //       message: 'Error',
+  //       type: false,
+  //     });
+  //   }
+  // }
 
   async findTypeById(id: string) {
     try {
       return await this.typeModel
         .findById(id)
-        .select('_id typeName typeCode createdAt')
+        .select('_id typeName typeCode status createdAt')
         .exec();
     } catch (err) {
       console.log('Error: ', err);
